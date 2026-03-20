@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery — Blendit Barbershop</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'red':  '#C0182B',
+            'red2': '#8B0000',
+            'ink':  '#0a0a0a',
+          },
+          fontFamily: {
+            'heading': ['Bebas Neue', 'sans-serif'],
+            'body':    ['Outfit', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #0a0a0a;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .hex { clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); }
+    .hex-bg {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='115' viewBox='0 0 100 115'%3E%3Cpolygon points='50,5 95,28 95,73 50,96 5,73 5,28' fill='none' stroke='%23C0182B' stroke-opacity='0.05' stroke-width='1'/%3E%3C/svg%3E");
+      background-size: 100px 115px;
+    }
+
+    .reveal       { opacity:0; transform:translateY(28px); transition:opacity .65s ease-out, transform .65s ease-out; }
+    .reveal-l     { opacity:0; transform:translateX(-36px); transition:opacity .7s ease-out, transform .7s ease-out; }
+    .reveal-r     { opacity:0; transform:translateX(36px);  transition:opacity .7s ease-out, transform .7s ease-out; }
+    .on           { opacity:1 !important; transform:none !important; }
+    .d1 { transition-delay:.08s } .d2 { transition-delay:.16s } .d3 { transition-delay:.24s }
+    .d4 { transition-delay:.32s } .d5 { transition-delay:.4s }  .d6 { transition-delay:.48s }
+
+    .pill {
+      display:inline-flex; align-items:center; gap:10px;
+      font-size:.65rem; font-weight:600; letter-spacing:.28em; text-transform:uppercase; color:#C0182B;
+    }
+    .pip { width:10px; height:11px; clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); background:#C0182B; flex-shrink:0; }
+
+    .btn-red {
+      background:#C0182B; color:#fff; font-weight:600; font-size:.75rem;
+      letter-spacing:.18em; text-transform:uppercase; padding:.95rem 2rem;
+      display:inline-block; text-align:center; transition:background .25s, box-shadow .25s;
+    }
+    .btn-red:hover { background:#a0141f; box-shadow:0 0 28px rgba(192,24,43,.5); }
+    .btn-outline {
+      border:1px solid rgba(255,255,255,.25); color:#fff; font-weight:600; font-size:.75rem;
+      letter-spacing:.18em; text-transform:uppercase; padding:.95rem 2rem;
+      display:inline-block; text-align:center; transition:border-color .25s, color .25s;
+    }
+    .btn-outline:hover { border-color:#C0182B; color:#C0182B; }
+
+    /* ── Nav ─────────────────────────────────────── */
+    #topnav {
+      position:fixed; top:0; left:0; right:0; z-index:50;
+      background:rgba(0,0,0,.82); border-bottom:1px solid rgba(255,255,255,.05);
+      backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+      transition:background .3s;
+    }
+    #topnav.solid { background:rgba(0,0,0,.97); }
+    .nav-link { color:rgba(255,255,255,.6); font-size:.8rem; font-weight:500; transition:color .2s; }
+    .nav-link:hover, .nav-link.active { color:#fff; }
+    .ham span { display:block; width:22px; height:2px; background:#fff; margin:5px 0; transition:.3s; }
+    .ham.open span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+    .ham.open span:nth-child(2) { opacity:0; }
+    .ham.open span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
+    #mob-menu { display:none; }
+    #mob-menu.open { display:block; }
+
+    /* ── Page hero ───────────────────────────────── */
+    .hero-red-bar { position:absolute; top:0; left:0; right:0; height:2px; background:#C0182B; }
+
+    /* ── Filter pills ────────────────────────────── */
+    .filter-btn {
+      font-size:.65rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase;
+      padding:.55rem 1.25rem;
+      border: 1px solid rgba(255,255,255,.1);
+      color: rgba(255,255,255,.45);
+      transition: border-color .25s, color .25s, background .25s;
+      cursor: pointer; background: transparent;
+    }
+    .filter-btn:hover { border-color: rgba(255,255,255,.3); color: rgba(255,255,255,.8); }
+    .filter-btn.active { border-color: #C0182B; color: #fff; background: rgba(192,24,43,.12); }
+
+    /* ── Gallery grid ────────────────────────────── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    @media (min-width: 768px) {
+      .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    }
+    @media (min-width: 1024px) {
+      .gallery-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    }
+
+    /* ── Gallery item ────────────────────────────── */
+    .g-item {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: #111;
+    }
+    .g-item.span2 { grid-column: span 2; }
+    .g-item.tall  { grid-row: span 2; }
+
+    .g-item img, .g-item video {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+      display: block;
+      transition: transform .55s ease;
+    }
+    .g-item:hover img,
+    .g-item:hover video { transform: scale(1.06); }
+
+    .g-item-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 50%);
+      opacity: 0; transition: opacity .3s;
+      display: flex; align-items: flex-end; padding: 1rem;
+    }
+    .g-item:hover .g-item-overlay { opacity: 1; }
+
+    .g-item-label {
+      font-size: .6rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(255,255,255,.8);
+    }
+
+    /* ── Video play icon ─────────────────────────── */
+    .play-icon {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 44px; height: 44px;
+      background: rgba(192,24,43,.85);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .25s, transform .25s;
+    }
+    .g-item:hover .play-icon { background: #C0182B; transform: translate(-50%,-50%) scale(1.1); }
+
+    /* ── Coming Soon tile ────────────────────────── */
+    .g-placeholder {
+      position: relative;
+      display: flex; align-items: center; justify-content: center; flex-direction: column;
+      border: 1px dashed rgba(255,255,255,.07);
+      background: rgba(255,255,255,.01);
+      min-height: 200px;
+      gap: 8px;
+      cursor: default;
+    }
+
+    /* ── Lightbox ────────────────────────────────── */
+    #lightbox {
+      position: fixed; inset: 0; z-index: 9990;
+      background: rgba(0,0,0,.95);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1.5rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s;
+    }
+    #lightbox.show { opacity: 1; pointer-events: all; }
+    #lightbox img, #lightbox video {
+      max-width: 100%; max-height: 90vh;
+      object-fit: contain;
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    #lb-close {
+      position: absolute; top: 20px; right: 20px;
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      color: #fff; font-size: 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background .2s;
+    }
+    #lb-close:hover { background: #C0182B; border-color: #C0182B; }
+
+    /* ── Scrollbar ───────────────────────────────── */
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-track { background:#0a0a0a; }
+    ::-webkit-scrollbar-thumb { background:#C0182B; border-radius:2px; }
+
+    /* ── Misc ────────────────────────────────────── */
+    .red-bar { width:52px; height:2px; background:#C0182B; }
+
+    /* ── Page Loader ──────────────────────────────── */
+    #page-loader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #0a0a0a;
+      display: flex; align-items: center; justify-content: center; flex-direction: column;
+      transition: opacity .7s ease, visibility .7s ease;
+    }
+    #page-loader.done { opacity: 0; visibility: hidden; pointer-events: none; }
+    .loader-logo {
+      display: flex; align-items: center; gap: 18px;
+      opacity: 0; transform: scale(.88) translateY(12px);
+      animation: loaderReveal .75s cubic-bezier(.22,1,.36,1) .15s forwards;
+    }
+    .loader-tagline { font-size: .6rem; letter-spacing: .38em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-top: 3px; }
+    .loader-bar-wrap {
+      width: 160px; height: 1px; background: rgba(255,255,255,.07);
+      margin-top: 44px; overflow: hidden;
+      opacity: 0; animation: loaderReveal .5s ease .5s forwards;
+    }
+    .loader-bar { height: 100%; width: 0; background: #C0182B; animation: loaderFill 1.3s cubic-bezier(.4,0,.2,1) .55s forwards; }
+    @keyframes loaderReveal { to { opacity: 1; transform: scale(1) translateY(0); } }
+    @keyframes loaderFill   { to { width: 100%; } }
+
+    /* ── Custom Cursor ────────────────────────────── */
+    #cursor-dot, #cursor-ring {
+      position: fixed; border-radius: 50%;
+      pointer-events: none; z-index: 99998;
+      transform: translate(-50%, -50%);
+    }
+    #cursor-dot { width: 7px; height: 7px; background: #C0182B; transition: transform .13s ease, opacity .3s; opacity: 0; }
+    #cursor-ring { width: 30px; height: 30px; border: 1.5px solid rgba(192,24,43,.5); transition: width .22s ease, height .22s ease, border-color .22s ease, opacity .3s; opacity: 0; }
+    body.cursor-ready #cursor-dot, body.cursor-ready #cursor-ring { opacity: 1; }
+    body.cursor-hover #cursor-dot  { transform: translate(-50%,-50%) scale(2); }
+    body.cursor-hover #cursor-ring { width: 46px; height: 46px; border-color: rgba(192,24,43,.9); }
+    @media (hover: none) { #cursor-dot, #cursor-ring { display: none !important; } }
+  </style>
+</head>
+<body class="bg-ink font-body">
+
+<!-- ═══════════════════ PAGE LOADER ═══════════════════ -->
+<div id="page-loader">
+  <div class="loader-logo">
+    <div class="hex w-16 h-[74px] overflow-hidden bg-red flex-shrink-0">
+      <img src="Blend it logo.jpg" alt="" class="w-full h-full object-cover">
+    </div>
+    <div>
+      <div class="font-heading text-5xl tracking-[.2em] text-white">BLENDIT</div>
+      <div class="loader-tagline">Gallery · The Work</div>
+    </div>
+  </div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+</div>
+
+<!-- ═══════════════════ CUSTOM CURSOR ═══════════════════ -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- ═══════════════════ LIGHTBOX ═══════════════════ -->
+<div id="lightbox">
+  <button id="lb-close" onclick="closeLightbox()">✕</button>
+  <div id="lb-content"></div>
+</div>
+
+<!-- ═══════════════════ NAVIGATION ═══════════════════ -->
+<nav id="topnav">
+  <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
+
+    <a href="index.html" class="flex items-center gap-3">
+      <div class="hex w-9 h-10 overflow-hidden bg-red flex-shrink-0">
+        <img src="Blend it logo.jpg" alt="Blendit" class="w-full h-full object-cover">
+      </div>
+      <span class="font-heading text-xl tracking-widest">BLENDIT</span>
+    </a>
+
+    <div class="hidden md:flex items-center gap-7">
+      <a href="index.html#story"    class="nav-link">Story</a>
+      <a href="index.html#services" class="nav-link">Services</a>
+      <a href="team.html"           class="nav-link">Team</a>
+      <a href="index.html#blx"      class="nav-link">BLX</a>
+      <a href="academy.html"        class="nav-link">Academy</a>
+      <a href="gallery.html"        class="nav-link active" style="color:#fff">Gallery</a>
+      <a href="index.html#location" class="nav-link">Location</a>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <a href="https://booksy.com/en-ca/dl/show-business/9409" target="_blank"
+         class="hidden md:block btn-red text-sm py-2.5 px-5">Book Now</a>
+      <button id="ham-btn" class="ham md:hidden" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div id="mob-menu" class="border-t border-white/5 bg-black/96">
+    <div class="px-6 py-6 flex flex-col gap-5 text-sm font-medium">
+      <a href="index.html#story"    class="text-white/75 hover:text-white" onclick="closeMob()">Our Story</a>
+      <a href="index.html#services" class="text-white/75 hover:text-white" onclick="closeMob()">Services</a>
+      <a href="team.html"           class="text-white/75 hover:text-white" onclick="closeMob()">Team</a>
+      <a href="index.html#blx"      class="text-white/75 hover:text-white" onclick="closeMob()">BLX Formula</a>
+      <a href="academy.html"        class="text-white/75 hover:text-white" onclick="closeMob()">Academy</a>
+      <a href="gallery.html"        class="text-white"   onclick="closeMob()">Gallery</a>
+      <a href="index.html#location" class="text-white/75 hover:text-white" onclick="closeMob()">Location</a>
+      <a href="https://booksy.com/en-ca/dl/show-business/9409" target="_blank" class="btn-red text-center">Book Now</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ═══════════════════ PAGE HERO ═══════════════════ -->
+<section class="relative pt-44 pb-20 overflow-hidden hex-bg">
+  <div class="hero-red-bar"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0a0a0a 0%,#110003 50%,#0a0a0a 100%);"></div>
+
+  <div class="hex absolute top-24 right-20 w-20 h-[92px] bg-red/[0.07] hidden lg:block"></div>
+  <div class="hex absolute bottom-10 left-14 w-14 h-[64px] bg-red/[0.06] hidden lg:block"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-5 text-center">
+    <div class="pill justify-center mb-6 reveal"><div class="pip"></div>The Work<div class="pip"></div></div>
+    <h1 class="font-heading leading-none tracking-wide text-white mb-6 reveal d1"
+        style="font-size:clamp(4.5rem,14vw,10rem)">
+      THE GALLERY
+    </h1>
+    <div class="red-bar mx-auto mb-6 reveal d2"></div>
+    <p class="text-white/40 text-lg max-w-md mx-auto leading-relaxed reveal d2">
+      Every photo tells the same story — precision, care, and a standard that doesn't bend.
+    </p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════ FILTER + GRID ═══════════════════ -->
+<section class="py-16 max-w-7xl mx-auto px-5">
+
+  <!-- Filter buttons -->
+  <div class="flex flex-wrap gap-2 mb-10 reveal">
+    <button class="filter-btn active" data-filter="all"     onclick="filterGallery('all',this)">All</button>
+    <button class="filter-btn"        data-filter="cuts"    onclick="filterGallery('cuts',this)">Cuts</button>
+    <button class="filter-btn"        data-filter="team"    onclick="filterGallery('team',this)">Team</button>
+    <button class="filter-btn"        data-filter="shop"    onclick="filterGallery('shop',this)">Shop</button>
+    <button class="filter-btn"        data-filter="academy" onclick="filterGallery('academy',this)">Academy</button>
+    <button class="filter-btn"        data-filter="video"   onclick="filterGallery('video',this)">Videos</button>
+  </div>
+
+  <!-- Gallery grid -->
+  <div class="gallery-grid" id="gallery-grid">
+
+    <!-- Shop interior — large feature tile -->
+    <div class="g-item span2 reveal" style="aspect-ratio:16/9;" data-cat="shop" onclick="openLightbox('img','shop-interior.webp','Inside the Shop')">
+      <img src="shop-interior.webp" alt="Inside Blendit Barbershop" loading="lazy">
+      <div class="g-item-overlay"><span class="g-item-label">Inside the Shop</span></div>
+    </div>
+
+    <!-- Sajjad -->
+    <div class="g-item tall reveal d1" style="aspect-ratio:3/4;" data-cat="team" onclick="openLightbox('img','Sajad MTT.jpg','Sajjad — Co-Founder')">
+      <img src="Sajad MTT.jpg" alt="Sajjad" loading="lazy">
+      <div class="g-item-overlay"><span class="g-item-label">Sajjad · Co-Founder</span></div>
+    </div>
+
+    <!-- Hayzo -->
+    <div class="g-item reveal d2" style="aspect-ratio:3/4;" data-cat="team" onclick="openLightbox('img','Hayzo MTT.jpg','Hayzo — Co-Founder')">
+      <img src="Hayzo MTT.jpg" alt="Hayzo" loading="lazy">
+      <div class="g-item-overlay"><span class="g-item-label">Hayzo · Co-Founder</span></div>
+    </div>
+
+    <!-- Eddy -->
+    <div class="g-item reveal d3" style="aspect-ratio:3/4;" data-cat="team" onclick="openLightbox('img','Eddy MTT.jpg','Eddy — Senior Barber')">
+      <img src="Eddy MTT.jpg" alt="Eddy" loading="lazy">
+      <div class="g-item-overlay"><span class="g-item-label">Eddy · Senior Barber</span></div>
+    </div>
+
+    <!-- Academy promo 1 — large -->
+    <div class="g-item span2 reveal" style="aspect-ratio:4/3;" data-cat="academy" onclick="openLightbox('img','academy-promo.jpg','Blendit Academy Semester 2')">
+      <img src="academy-promo.jpg" alt="Academy" loading="lazy" style="object-position:center">
+      <div class="g-item-overlay"><span class="g-item-label">Academy · Semester 2 Live</span></div>
+    </div>
+
+    <!-- BLX Product -->
+    <div class="g-item reveal d1" style="aspect-ratio:1;" data-cat="shop" onclick="openLightbox('img','blx-product.jpg','BLX Formula')">
+      <img src="blx-product.jpg" alt="BLX Formula Products" loading="lazy">
+      <div class="g-item-overlay"><span class="g-item-label">BLX Formula</span></div>
+    </div>
+
+    <!-- Adel -->
+    <div class="g-item reveal d2" style="aspect-ratio:3/4;" data-cat="team" onclick="openLightbox('img','Adel MTT.jpg','Adel — Barber')">
+      <img src="Adel MTT.jpg" alt="Adel" loading="lazy">
+      <div class="g-item-overlay"><span class="g-item-label">Adel · Barber</span></div>
+    </div>
+
+    <!-- Bini -->
+    <div class="g-item reveal d3" style="aspect-ratio:3/4;" data-cat="team" onclick="openLightbox('img','Albin MTT.jpg','Bini — Barber')">
+      <img src="Albin MTT.jpg" alt="Bini" loading="lazy">
+      <div class="g-item-overlay"><span class="g-item-label">Bini · Barber</span></div>
+    </div>
+
+    <!-- Video 1 — B-Roll -->
+    <div class="g-item span2 reveal" style="aspect-ratio:9/16; max-height:520px;" data-cat="video" onclick="openLightbox('video','0320.mp4','Blendit — B-Roll')">
+      <video src="0320.mp4" muted loop autoplay playsinline style="object-position:center;"></video>
+      <div class="play-icon">
+        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <div class="g-item-overlay"><span class="g-item-label">Blendit B-Roll</span></div>
+    </div>
+
+    <!-- RJ -->
+    <div class="g-item reveal d1" style="aspect-ratio:3/4;" data-cat="team" onclick="openLightbox('img','Rj MTT.jpg','RJ — Barber')">
+      <img src="Rj MTT.jpg" alt="RJ" loading="lazy">
+      <div class="g-item-overlay"><span class="g-item-label">RJ · Barber</span></div>
+    </div>
+
+    <!-- Subhan -->
+    <div class="g-item reveal d2" style="aspect-ratio:3/4;" data-cat="team" onclick="openLightbox('img','Subhan MTT.jpg','Subhan — Barber')">
+      <img src="Subhan MTT.jpg" alt="Subhan" loading="lazy">
+      <div class="g-item-overlay"><span class="g-item-label">Subhan · Barber</span></div>
+    </div>
+
+    <!-- Academy promo 2 -->
+    <div class="g-item reveal d3" style="aspect-ratio:1;" data-cat="academy" onclick="openLightbox('img','academy-promo-2.jpg','Blendit Academy')">
+      <img src="academy-promo-2.jpg" alt="Academy 2" loading="lazy" style="object-position:center">
+      <div class="g-item-overlay"><span class="g-item-label">Academy · Class of 2026</span></div>
+    </div>
+
+    <!-- Video 2 -->
+    <div class="g-item reveal" style="aspect-ratio:9/16; max-height:360px;" data-cat="video" onclick="openLightbox('video','0321-1.mp4','Shop Footage')">
+      <video src="0321-1.mp4" muted loop autoplay playsinline style="object-position:center;"></video>
+      <div class="play-icon">
+        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <div class="g-item-overlay"><span class="g-item-label">Shop Footage</span></div>
+    </div>
+
+    <!-- Video 3 -->
+    <div class="g-item reveal d1" style="aspect-ratio:9/16; max-height:360px;" data-cat="video" onclick="openLightbox('video','0320-1.mp4','In The Chair')">
+      <video src="0320-1.mp4" muted loop autoplay playsinline style="object-position:center;"></video>
+      <div class="play-icon">
+        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <div class="g-item-overlay"><span class="g-item-label">In The Chair</span></div>
+    </div>
+
+    <!-- Cuts coming soon placeholders -->
+    <div class="g-placeholder reveal d2" style="aspect-ratio:3/4;" data-cat="cuts">
+      <div class="hex w-8 h-9 bg-red/20"></div>
+      <p class="text-white/20 text-[.6rem] tracking-[.2em] uppercase text-center px-4">Cuts Gallery<br>Coming Soon</p>
+    </div>
+    <div class="g-placeholder reveal d3" style="aspect-ratio:3/4;" data-cat="cuts">
+      <div class="hex w-8 h-9 bg-red/20"></div>
+      <p class="text-white/20 text-[.6rem] tracking-[.2em] uppercase text-center px-4">More Work<br>Coming Soon</p>
+    </div>
+
+    <!-- Instagram CTA tile -->
+    <div class="g-item span2 reveal" style="aspect-ratio:3/1; min-height:160px; cursor:pointer;"
+         onclick="window.open('https://instagram.com/blenditbarbershop','_blank')" data-cat="all">
+      <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:linear-gradient(135deg,#111,#1a0004);border:1px solid rgba(192,24,43,.15);">
+        <svg class="w-7 h-7 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        <div class="text-center">
+          <p class="text-white/60 font-medium text-sm hover:text-white transition-colors">@blenditbarbershop</p>
+          <p class="text-white/25 text-xs mt-1">Follow for daily cuts &amp; clips</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════ CTA ═══════════════════ -->
+<section class="py-24 border-t border-white/[0.04]" style="background:linear-gradient(135deg,#0d0003 0%,#0a0a0a 50%,#0d0003 100%)">
+  <div class="max-w-3xl mx-auto px-5 text-center">
+    <div class="pill justify-center mb-6 reveal"><div class="pip"></div>Book Now<div class="pip"></div></div>
+    <h2 class="font-heading text-5xl md:text-6xl tracking-wide text-white mb-6 reveal d1">
+      YOU'RE NEXT<br>IN THE CHAIR
+    </h2>
+    <p class="text-white/40 text-base leading-relaxed mb-10 reveal d2">
+      Stop scrolling. Start booking.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center reveal d3">
+      <a href="https://booksy.com/en-ca/dl/show-business/9409" target="_blank" class="btn-red">Book on Booksy</a>
+      <a href="index.html" class="btn-outline">Back to Home</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer class="bg-black border-t border-white/[0.05] pt-16 pb-10">
+  <div class="max-w-7xl mx-auto px-5">
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+      <div>
+        <div class="flex items-center gap-3 mb-5">
+          <div class="hex w-10 h-[46px] overflow-hidden bg-red flex-shrink-0">
+            <img src="Blend it logo.jpg" alt="" class="w-full h-full object-cover">
+          </div>
+          <span class="font-heading text-2xl tracking-widest">BLENDIT</span>
+        </div>
+        <p class="text-white/30 text-sm leading-relaxed mb-5">
+          Premium barbershop in Stoney Creek. Built by two best friends at 17. Now Hamilton's finest.
+        </p>
+        <a href="https://instagram.com/blenditbarbershop" target="_blank"
+           class="inline-flex items-center gap-2 text-white/35 hover:text-red transition-colors text-sm">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          @blenditbarbershop
+        </a>
+      </div>
+
+      <div>
+        <h4 class="font-heading tracking-widest text-sm text-white/50 mb-5">NAVIGATE</h4>
+        <ul class="space-y-3 text-sm text-white/35">
+          <li><a href="index.html#story" class="hover:text-white transition-colors">Our Story</a></li>
+          <li><a href="index.html#services" class="hover:text-white transition-colors">Services</a></li>
+          <li><a href="team.html" class="hover:text-white transition-colors">The Team</a></li>
+          <li><a href="academy.html" class="hover:text-white transition-colors">Academy</a></li>
+          <li><a href="gallery.html" class="hover:text-white transition-colors text-white">Gallery</a></li>
+          <li><a href="index.html#location" class="hover:text-white transition-colors">Location</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-heading tracking-widest text-sm text-white/50 mb-5">FIND US</h4>
+        <ul class="space-y-3 text-sm text-white/35">
+          <li>Stoney Creek, Ontario</li>
+          <li class="pt-1">(905) — Coming Soon</li>
+          <li class="pt-1"><a href="https://instagram.com/blenditbarbershop" target="_blank" class="hover:text-white transition-colors">@blenditbarbershop</a></li>
+          <li class="pt-1"><a href="https://booksy.com/en-ca/dl/show-business/9409" target="_blank" class="hover:text-white transition-colors">Book on Booksy →</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-white/[0.05] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-white/20 text-xs">&copy; 2026 Blendit Barbershop. All rights reserved.</p>
+      <a href="https://instagram.com/whitelinedigital" target="_blank"
+         class="group flex items-center gap-2.5 px-4 py-2 border border-white/[0.07] hover:border-red/40 transition-colors">
+        <span class="text-white/25 text-[.6rem] tracking-[.25em] uppercase group-hover:text-white/50 transition-colors">Site by</span>
+        <span class="font-heading tracking-[.18em] text-sm text-white/55 group-hover:text-white transition-colors">WHITELINE DIGITAL</span>
+        <svg class="w-3 h-3 text-white/20 group-hover:text-red transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  // ── Nav scroll ───────────────────────────────────────────
+  const nav = document.getElementById('topnav');
+  window.addEventListener('scroll', () => nav.classList.toggle('solid', window.scrollY > 60));
+
+  // ── Hamburger ────────────────────────────────────────────
+  const hamBtn = document.getElementById('ham-btn');
+  const mobMenu = document.getElementById('mob-menu');
+  function closeMob() { hamBtn.classList.remove('open'); mobMenu.classList.remove('open'); }
+  hamBtn.addEventListener('click', () => {
+    hamBtn.classList.toggle('open');
+    mobMenu.classList.toggle('open');
+  });
+
+  // ── Scroll reveal ────────────────────────────────────────
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal, .reveal-l, .reveal-r').forEach(el => obs.observe(el));
+
+  // ── Gallery filter ───────────────────────────────────────
+  function filterGallery(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.g-item, .g-placeholder').forEach(item => {
+      const c = item.dataset.cat || 'all';
+      const show = cat === 'all' || c === cat || c === 'all';
+      item.style.display = show ? '' : 'none';
+    });
+  }
+
+  // ── Lightbox ─────────────────────────────────────────────
+  const lb      = document.getElementById('lightbox');
+  const lbContent = document.getElementById('lb-content');
+  function openLightbox(type, src, label) {
+    lbContent.innerHTML = '';
+    if (type === 'img') {
+      const img = document.createElement('img');
+      img.src = src; img.alt = label;
+      lbContent.appendChild(img);
+    } else {
+      const vid = document.createElement('video');
+      vid.src = src; vid.controls = true; vid.autoplay = true; vid.muted = false;
+      vid.style.cssText = 'max-width:100%;max-height:85vh;';
+      lbContent.appendChild(vid);
+    }
+    lb.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    lb.classList.remove('show');
+    lbContent.innerHTML = '';
+    document.body.style.overflow = '';
+  }
+  lb.addEventListener('click', function(e) {
+    if (e.target === lb) closeLightbox();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // ── Page Loader ───────────────────────────────────────────
+  (function() {
+    const loader = document.getElementById('page-loader');
+    if (!loader) return;
+    document.body.style.overflow = 'hidden';
+    function hide() { loader.classList.add('done'); document.body.style.overflow = ''; }
+    window.addEventListener('load', function() { setTimeout(hide, 1950); });
+    setTimeout(hide, 4000);
+  })();
+
+  // ── Custom Cursor ─────────────────────────────────────────
+  (function() {
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    if (!dot || !ring) return;
+    if (window.matchMedia('(hover: none)').matches) return;
+    document.body.style.cursor = 'none';
+    let dx = -100, dy = -100, rx = -100, ry = -100;
+    document.addEventListener('mousemove', function(e) {
+      dx = e.clientX; dy = e.clientY;
+      dot.style.left = dx + 'px'; dot.style.top = dy + 'px';
+      document.body.classList.add('cursor-ready');
+    });
+    (function animRing() {
+      rx += (dx - rx) * 0.13;
+      ry += (dy - ry) * 0.13;
+      ring.style.left = Math.round(rx * 10) / 10 + 'px';
+      ring.style.top  = Math.round(ry * 10) / 10 + 'px';
+      requestAnimationFrame(animRing);
+    })();
+    document.querySelectorAll('a, button, [role="button"], .g-item, .filter-btn').forEach(function(el) {
+      el.addEventListener('mouseenter', function() { document.body.classList.add('cursor-hover'); });
+      el.addEventListener('mouseleave', function() { document.body.classList.remove('cursor-hover'); });
+    });
+  })();
+</script>
+
+</body>
+</html>
