@@ -441,15 +441,7 @@
       <div class="g-item-overlay"><span class="g-item-label">In The Chair</span></div>
     </div>
 
-    <!-- Cuts coming soon placeholders -->
-    <div class="g-placeholder reveal d2" style="aspect-ratio:3/4;" data-cat="cuts">
-      <div class="hex w-8 h-9 bg-red/20"></div>
-      <p class="text-white/20 text-[.6rem] tracking-[.2em] uppercase text-center px-4">Cuts Gallery<br>Coming Soon</p>
-    </div>
-    <div class="g-placeholder reveal d3" style="aspect-ratio:3/4;" data-cat="cuts">
-      <div class="hex w-8 h-9 bg-red/20"></div>
-      <p class="text-white/20 text-[.6rem] tracking-[.2em] uppercase text-center px-4">More Work<br>Coming Soon</p>
-    </div>
+    <!-- Cut photos to be added -->
 
     <!-- Instagram CTA tile -->
     <div class="g-item span2 reveal" style="aspect-ratio:3/1; min-height:160px; cursor:pointer;"
@@ -567,7 +559,7 @@
   function filterGallery(cat, btn) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    document.querySelectorAll('.g-item, .g-placeholder').forEach(item => {
+    document.querySelectorAll('.g-item').forEach(item => {
       const c = item.dataset.cat || 'all';
       const show = cat === 'all' || c === cat || c === 'all';
       item.style.display = show ? '' : 'none';
