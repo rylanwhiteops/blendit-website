@@ -150,6 +150,11 @@
       padding: 2rem 1.75rem 1.5rem;
     }
 
+    /* ── Crew flex-wrap centering ───────────────── */
+    .crew-grid > * { width:calc(50% - 8px); }
+    @media(min-width:768px)  { .crew-grid > * { width:calc(33.333% - 14px); } }
+    @media(min-width:1024px) { .crew-grid > * { width:calc(20% - 16px); } }
+
     /* ── Barber cards (crew - standard) ─────────── */
     .crew-card {
       position: relative;
@@ -412,7 +417,7 @@
     <p class="text-white/40 text-sm mt-3 max-w-md">Every barber at Blendit was chosen for one reason — they don't just cut hair, they care about the result.</p>
   </div>
 
-  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
+  <div class="crew-grid flex flex-wrap justify-center gap-4 md:gap-5">
 
     <!-- Eddy -->
     <div class="crew-card reveal d1">
