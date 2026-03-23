@@ -222,7 +222,7 @@
     }
     #cursor-dot {
       width: 7px; height: 7px; background: #C0182B;
-      transition: transform .13s ease, opacity .3s; opacity: 0;
+      transition: transform .08s ease, opacity .3s; opacity: 0;
     }
     #cursor-ring {
       width: 30px; height: 30px;
@@ -748,8 +748,8 @@
       document.body.classList.add('cursor-ready');
     });
     (function animRing() {
-      rx += (dx - rx) * 0.13;
-      ry += (dy - ry) * 0.13;
+      rx += (dx - rx) * 0.22;
+      ry += (dy - ry) * 0.22;
       ring.style.left = Math.round(rx * 10) / 10 + 'px';
       ring.style.top  = Math.round(ry * 10) / 10 + 'px';
       requestAnimationFrame(animRing);
