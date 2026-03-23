@@ -115,6 +115,12 @@
     ::-webkit-scrollbar-track { background:#0a0a0a; }
     ::-webkit-scrollbar-thumb { background:#C0182B; border-radius:2px; }
 
+    /* Hide Tailwind CDN inspector badge */
+    #__tw__, [id^="__tw"], body > iframe,
+    body > div[style*="position: fixed"][style*="bottom"][style*="right"]:not(#page-loader):not(#cursor-dot):not(#cursor-ring) {
+      display: none !important;
+    }
+
     /* ── Page Loader ──────────────────────────────── */
     #page-loader {
       position: fixed; inset: 0; z-index: 9999;
@@ -248,8 +254,8 @@
           <img src="blx-product.jpg" alt="BLX Formula Products" class="w-full h-full object-cover">
         </div>
         <!-- Used at Blendit badge -->
-        <div class="absolute -bottom-4 -right-4 md:-right-10 bg-black/95 border border-red/40 px-4 py-3 z-20">
-          <div class="text-red text-[10px] font-semibold tracking-[.25em] uppercase mb-0.5">Born in the</div>
+        <div class="absolute bottom-4 right-4 bg-black/90 border border-red/40 px-5 py-3 z-20">
+          <div class="text-red text-[10px] font-semibold tracking-[.25em] uppercase mb-1">Born in the</div>
           <div class="font-heading text-white text-lg tracking-widest">CHAIR</div>
         </div>
       </div>
@@ -378,12 +384,16 @@
     </p>
 
     <!-- Bundle card -->
-    <div class="inline-block w-full max-w-sm border reveal d2" style="background:rgba(255,255,255,.03);border-color:rgba(192,24,43,.35);">
+    <div class="inline-block w-full max-w-sm border reveal d2" style="background:rgba(5,5,5,.9);border-color:rgba(192,24,43,.35);">
       <div class="p-8">
         <div class="flex items-center justify-center gap-5 mb-6">
-          <div class="hex w-12 h-[55px] bg-red/20"></div>
+          <div class="hex w-12 h-[55px] overflow-hidden flex-shrink-0">
+            <img src="BLX Spray.jpg" alt="Sea Salt Spray" class="w-full h-full object-cover">
+          </div>
           <div class="text-white/30 font-heading text-2xl">+</div>
-          <div class="hex w-12 h-[55px] bg-red/20"></div>
+          <div class="hex w-12 h-[55px] overflow-hidden flex-shrink-0">
+            <img src="BLX powder.jpg" alt="Texture Powder" class="w-full h-full object-cover">
+          </div>
         </div>
         <div class="font-heading text-white text-2xl tracking-widest mb-1">BLX BUNDLE</div>
         <div class="text-white/40 text-sm mb-6">Sea Salt Spray + Style Texture Powder</div>
@@ -415,25 +425,25 @@
     <div class="grid md:grid-cols-3 gap-6">
 
       <div class="p-8 border border-white/[0.07] reveal d1" style="background:rgba(255,255,255,.02)">
-        <div class="hex w-10 h-[46px] bg-red/20 flex items-center justify-center mb-5">
+        <div style="filter:drop-shadow(0 0 10px rgba(192,24,43,.55));" class="mb-5"><div class="hex w-10 h-[46px] bg-red/35 flex items-center justify-center">
           <svg class="w-5 h-5 text-red" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
-        </div>
+        </div></div>
         <h3 class="font-heading text-2xl tracking-wide text-white mb-3">BARBERSHOP TESTED</h3>
         <p class="text-white/40 text-sm leading-relaxed">These aren't products that ended up on the shelf by accident. Every barber at Blendit uses BLX daily. If it didn't perform in the chair, it wouldn't be here.</p>
       </div>
 
       <div class="p-8 border border-white/[0.07] reveal d2" style="background:rgba(255,255,255,.02)">
-        <div class="hex w-10 h-[46px] bg-red/20 flex items-center justify-center mb-5">
+        <div style="filter:drop-shadow(0 0 10px rgba(192,24,43,.55));" class="mb-5"><div class="hex w-10 h-[46px] bg-red/35 flex items-center justify-center">
           <svg class="w-5 h-5 text-red" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
-        </div>
+        </div></div>
         <h3 class="font-heading text-2xl tracking-wide text-white mb-3">CLEAN FORMULA</h3>
         <p class="text-white/40 text-sm leading-relaxed">No heavy waxes. No buildup. No mystery ingredients. BLX is formulated to perform without weighing your hair down or leaving residue after a wash.</p>
       </div>
 
       <div class="p-8 border border-white/[0.07] reveal d3" style="background:rgba(255,255,255,.02)">
-        <div class="hex w-10 h-[46px] bg-red/20 flex items-center justify-center mb-5">
+        <div style="filter:drop-shadow(0 0 10px rgba(192,24,43,.55));" class="mb-5"><div class="hex w-10 h-[46px] bg-red/35 flex items-center justify-center">
           <svg class="w-5 h-5 text-red" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-        </div>
+        </div></div>
         <h3 class="font-heading text-2xl tracking-wide text-white mb-3">EASY TO USE</h3>
         <p class="text-white/40 text-sm leading-relaxed">No complicated routine. Spray into damp hair for texture, dust in the powder at the roots for volume. Two products. One sharp look. Done.</p>
       </div>
