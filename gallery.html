@@ -334,115 +334,20 @@
     <button class="filter-btn"        data-filter="video"   onclick="filterGallery('video',this)">Videos</button>
   </div>
 
-  <!-- Gallery grid -->
-  <div class="gallery-grid" id="gallery-grid">
-
-    <!-- Shop interior — large feature tile -->
-    <div class="g-item span2 reveal" style="aspect-ratio:16/9;" data-cat="shop" onclick="openLightbox('img','shop-interior.webp','Inside the Shop')">
-      <img src="shop-interior.webp" alt="Inside Blendit Barbershop" loading="lazy" style="object-position:center 60%;">
-      <div class="g-item-overlay"><span class="g-item-label">Inside the Shop</span></div>
-    </div>
-
-    <!-- Sajjad -->
-    <div class="g-item tall reveal d1" style="aspect-ratio:3/4;" data-cat="team" onclick="openLightbox('img','Sajad MTT.jpg','Sajjad — Co-Founder')">
-      <img src="Sajad MTT.jpg" alt="Sajjad" loading="lazy">
-      <div class="g-item-overlay"><span class="g-item-label">Sajjad · Co-Founder</span></div>
-    </div>
-
-    <!-- Hayzo -->
-    <div class="g-item reveal d2" style="aspect-ratio:3/4;" data-cat="team" onclick="openLightbox('img','Hayzo MTT.jpg','Hayzo — Co-Founder')">
-      <img src="Hayzo MTT.jpg" alt="Hayzo" loading="lazy">
-      <div class="g-item-overlay"><span class="g-item-label">Hayzo · Co-Founder</span></div>
-    </div>
-
-    <!-- Eddy -->
-    <div class="g-item reveal d3" style="aspect-ratio:3/4;" data-cat="team" onclick="openLightbox('img','Eddy MTT.jpg','Eddy — Senior Barber')">
-      <img src="Eddy MTT.jpg" alt="Eddy" loading="lazy">
-      <div class="g-item-overlay"><span class="g-item-label">Eddy · Senior Barber</span></div>
-    </div>
-
-    <!-- Academy promo 1 — large -->
-    <div class="g-item span2 reveal" style="aspect-ratio:4/3;" data-cat="academy" onclick="openLightbox('img','academy-promo.jpg','Blendit Academy Semester 2')">
-      <img src="academy-promo.jpg" alt="Academy" loading="lazy" style="object-position:center">
-      <div class="g-item-overlay"><span class="g-item-label">Academy · Semester 2 Live</span></div>
-    </div>
-
-    <!-- BLX Product -->
-    <div class="g-item reveal d1" style="aspect-ratio:1;" data-cat="shop" onclick="openLightbox('img','blx-product.jpg','BLX Formula')">
-      <img src="blx-product.jpg" alt="BLX Formula Products" loading="lazy">
-      <div class="g-item-overlay"><span class="g-item-label">BLX Formula</span></div>
-    </div>
-
-    <!-- Adel -->
-    <div class="g-item reveal d2" style="aspect-ratio:3/4;" data-cat="team" onclick="openLightbox('img','Adel MTT.jpg','Adel — Barber')">
-      <img src="Adel MTT.jpg" alt="Adel" loading="lazy">
-      <div class="g-item-overlay"><span class="g-item-label">Adel · Barber</span></div>
-    </div>
-
-    <!-- Bini -->
-    <div class="g-item reveal d3" style="aspect-ratio:3/4;" data-cat="team" onclick="openLightbox('img','Albin MTT.jpg','Bini — Barber')">
-      <img src="Albin MTT.jpg" alt="Bini" loading="lazy">
-      <div class="g-item-overlay"><span class="g-item-label">Bini · Barber</span></div>
-    </div>
-
-    <!-- Video 1 — B-Roll -->
-    <div class="g-item span2 reveal" style="aspect-ratio:9/16; max-height:520px;" data-cat="video" onclick="openLightbox('video','0320.mp4','Blendit — B-Roll')">
-      <video src="0320.mp4" poster="shop-interior.webp" muted loop autoplay playsinline style="object-position:center;"></video>
-      <div class="play-icon">
-        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+  <!-- Coming soon placeholder — always visible, label updates on filter -->
+  <div id="gallery-coming-soon" style="min-height:340px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(192,24,43,.12); background:linear-gradient(135deg,#0d0003 0%,#0a0a0a 60%,#0d0003 100%); grid-column:1/-1;">
+    <div style="text-align:center; padding:3rem 2rem;">
+      <div style="display:flex; justify-content:center; margin-bottom:28px; gap:10px; align-items:center;">
+        <div class="hex" style="width:14px;height:16px;background:rgba(192,24,43,.25);flex-shrink:0;"></div>
+        <div class="hex" style="width:22px;height:25px;background:rgba(192,24,43,.5);flex-shrink:0;"></div>
+        <div class="hex" style="width:14px;height:16px;background:rgba(192,24,43,.25);flex-shrink:0;"></div>
       </div>
-      <div class="g-item-overlay"><span class="g-item-label">Blendit B-Roll</span></div>
+      <p id="cs-label" style="font-size:.6rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:#C0182B;margin-bottom:14px;">All</p>
+      <p style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,4rem);letter-spacing:.12em;color:#fff;line-height:1;">COMING SOON</p>
+      <p style="font-size:.75rem;color:rgba(255,255,255,.25);margin-top:14px;letter-spacing:.06em;">Content dropping — follow <a href="https://instagram.com/blenditbarbershop" target="_blank" style="color:rgba(192,24,43,.7);transition:color .2s;" onmouseover="this.style.color='#C0182B'" onmouseout="this.style.color='rgba(192,24,43,.7)'">@blenditbarbershop</a> for updates</p>
     </div>
-
-    <!-- RJ -->
-    <div class="g-item reveal d1" style="aspect-ratio:3/4;" data-cat="team" onclick="openLightbox('img','Rj MTT.jpg','RJ — Barber')">
-      <img src="Rj MTT.jpg" alt="RJ" loading="lazy">
-      <div class="g-item-overlay"><span class="g-item-label">RJ · Barber</span></div>
-    </div>
-
-    <!-- Subhan -->
-    <div class="g-item reveal d2" style="aspect-ratio:3/4;" data-cat="team" onclick="openLightbox('img','Subhan MTT.jpg','Subhan — Barber')">
-      <img src="Subhan MTT.jpg" alt="Subhan" loading="lazy">
-      <div class="g-item-overlay"><span class="g-item-label">Subhan · Barber</span></div>
-    </div>
-
-    <!-- Academy promo 2 -->
-    <div class="g-item reveal d3" style="aspect-ratio:1;" data-cat="academy" onclick="openLightbox('img','academy-promo-2.jpg','Blendit Academy')">
-      <img src="academy-promo-2.jpg" alt="Academy 2" loading="lazy" style="object-position:center">
-      <div class="g-item-overlay"><span class="g-item-label">Academy · Class of 2026</span></div>
-    </div>
-
-    <!-- Video 2 -->
-    <div class="g-item reveal" style="aspect-ratio:9/16; max-height:360px;" data-cat="video" onclick="openLightbox('video','0321-1.mp4','Shop Footage')">
-      <video src="0321-1.mp4" poster="Hayzo MTT.jpg" muted loop autoplay playsinline style="object-position:center;"></video>
-      <div class="play-icon">
-        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-      </div>
-      <div class="g-item-overlay"><span class="g-item-label">Shop Footage</span></div>
-    </div>
-
-    <!-- Video 3 -->
-    <div class="g-item reveal d1" style="aspect-ratio:9/16; max-height:360px;" data-cat="video" onclick="openLightbox('video','0320-1.mp4','In The Chair')">
-      <video src="0320-1.mp4" poster="Sajad MTT.jpg" muted loop autoplay playsinline style="object-position:center;"></video>
-      <div class="play-icon">
-        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-      </div>
-      <div class="g-item-overlay"><span class="g-item-label">In The Chair</span></div>
-    </div>
-
-    <!-- Instagram CTA tile -->
-    <div class="g-item span2 reveal" style="aspect-ratio:3/1; min-height:160px; cursor:pointer;"
-         onclick="window.open('https://instagram.com/blenditbarbershop','_blank')" data-cat="all">
-      <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:linear-gradient(135deg,#111,#1a0004);border:1px solid rgba(192,24,43,.15);">
-        <svg class="w-7 h-7 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-        <div class="text-center">
-          <p class="text-white/60 font-medium text-sm hover:text-white transition-colors">@blenditbarbershop</p>
-          <p class="text-white/25 text-xs mt-1">Follow for daily cuts &amp; clips</p>
-        </div>
-      </div>
-    </div>
-
   </div>
+
 </section>
 
 
@@ -545,14 +450,12 @@
   document.querySelectorAll('.reveal, .reveal-l, .reveal-r').forEach(el => obs.observe(el));
 
   // ── Gallery filter ───────────────────────────────────────
+  const catLabels = { all: 'All', cuts: 'Cuts', team: 'Team', shop: 'Shop', academy: 'Academy', video: 'Videos' };
   function filterGallery(cat, btn) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    document.querySelectorAll('.g-item').forEach(item => {
-      const c = item.dataset.cat || 'all';
-      const show = cat === 'all' || c === cat || c === 'all';
-      item.style.display = show ? '' : 'none';
-    });
+    const label = document.getElementById('cs-label');
+    if (label) label.textContent = catLabels[cat] || cat;
   }
 
   // ── Lightbox ─────────────────────────────────────────────
